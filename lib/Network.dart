@@ -1,12 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
 import 'package:tap_donate/AddNgoModel.dart';
 import 'package:tap_donate/ApiResponse.dart';
-import 'package:tap_donate/Categories.dart';
 import 'package:tap_donate/CategoryInformation.dart';
-import 'package:tap_donate/DonateModel.dart';
 import 'package:tap_donate/ForgotPasswordModel.dart';
 import 'package:tap_donate/LoginResultModel.dart';
 import 'package:tap_donate/NgoList.dart';
@@ -69,7 +66,6 @@ class Network {
       // then parse the JSON.
       //print();
       print(response.body);
-      return jsonDecode(response.body);
     } else {
       // If the server did not return a 201 CREATED response,
       // then throw an exception.
@@ -243,21 +239,14 @@ class Network {
     }
   }
 
-  static final picker = ImagePicker();
-  File image;
-  static Future getNgoImage(File image) async{
-    final pickedImage = await picker.getImage(source: ImageSource.camera);
-    if(pickedImage != null){
-      image = File(pickedImage.path);
-    }
-    else{
-      print('could not get image');
-    }
+
+  static Future getPicture(File file) async{
   }
+
 
   static Future<AddNgoModel> addNewNgo(AddNgoModel addNgoModel) async{
     final http.Response response = await http.post(
-      base_url + "v1/addngo",
+      base_url + "addngo",
       headers: <String, String>{
         "Content-Type": "application/json; charset=UTF-8"
       },
@@ -266,10 +255,11 @@ class Network {
         'ngo_contact': addNgoModel.ngoContact,
         'ngo_address': addNgoModel.ngoAddress,
         'ngo_logo_image': addNgoModel.ngoLogoImage,
+        'ngo_cover_image': addNgoModel.ngoCoverImage
       }),
     );
     if(response.statusCode == 200){
-      print('new ngo added');
+      print(response.body);
     }
     else{
       throw Exception("Could not add ngo");

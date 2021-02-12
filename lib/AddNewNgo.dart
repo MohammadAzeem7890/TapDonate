@@ -17,42 +17,24 @@ class AddNewNgo extends StatefulWidget {
 }
 
 class _AddNewNgoState extends State<AddNewNgo> {
-
   Color customGreen = new Color(0xff24B58F);
   TextEditingController ngoName = TextEditingController();
   TextEditingController ngoContact = TextEditingController();
   TextEditingController ngoAddress = TextEditingController();
+
   File image;
   final picker = ImagePicker();
 
   Future getCameraImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    setState(() async{
+    setState(() async {
       if (pickedFile != null) {
         image = File(pickedFile.path);
-        Dio dio = new Dio();
-        Response response;
-        FormData formData = FormData.fromMap({
-          "name": "wendux",
-          "age": 25,
-          "file": await MultipartFile.fromFile("./text.txt",filename: "upload.txt"),
-          "files": [
-            await MultipartFile.fromFile("./text1.txt", filename: "text1.txt"),
-            await MultipartFile.fromFile("./text2.txt", filename: "text2.txt"),
-          ]
-        });
-        response = await dio.post("/info", data: formData);
-
-        print(response.data);
-
       } else {
         setState(() {
-          AlertDialog(
-            title: Text("No Image Selected"),
-          );
+          Text("Failed");
         });
       }
-      String fileName = image.path.split('/').last;
     });
   }
 
@@ -154,8 +136,8 @@ class _AddNewNgoState extends State<AddNewNgo> {
                     ngoName: ngoName.text,
                     ngoContact: ngoContact.text,
                     ngoAddress: ngoAddress.text,
-                    ngoLogoImage: image.path,
-                    ngoCoverImage: image.path));
+                    ngoLogoImage: image,
+                    ngoCoverImage: image));
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => HomePage()));
               },

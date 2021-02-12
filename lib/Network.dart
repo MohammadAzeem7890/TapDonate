@@ -9,7 +9,7 @@ import 'package:tap_donate/LoginResultModel.dart';
 import 'package:tap_donate/NgoList.dart';
 import 'package:tap_donate/User.dart' as  SignUpUser;
 import 'package:tap_donate/loginModel.dart';
-
+import 'package:dio/dio.dart';
 import 'AddDonatioModel.dart';
 import 'CategoryModel.dart';
 
@@ -240,31 +240,59 @@ class Network {
   }
 
 
-  static Future getPicture(File file) async{
-  }
-
-
   static Future<AddNgoModel> addNewNgo(AddNgoModel addNgoModel) async{
-    final http.Response response = await http.post(
-      base_url + "addngo",
-      headers: <String, String>{
-        "Content-Type": "application/json; charset=UTF-8"
-      },
-      body: jsonEncode(<dynamic, dynamic>{
-        'ngo_name': addNgoModel.ngoName,
-        'ngo_contact': addNgoModel.ngoContact,
-        'ngo_address': addNgoModel.ngoAddress,
-        'ngo_logo_image': addNgoModel.ngoLogoImage,
-        'ngo_cover_image': addNgoModel.ngoCoverImage
-      }),
+    String logoImage = addNgoModel.ngoLogoImage.path.split('/').last;
+    String coverImage = addNgoModel.ngoCoverImage.path.split('/').last;
+    FormData data = FormData.fromMap({
+      "ngo_logo_image":
+          await MultipartFile.fromFile(addNgoModel.ngoLogoImage.path, filename: logoImage),
+      "ngo_cover_image":
+          await MultipartFile.fromFile(addNgoModel.ngoCoverImage.path, filename: coverImage),
+      "ngo_name":
+          addNgoModel.ngoName,
+      "ngo_contact":
+          addNgoModel.ngoContact,
+      'ngo_address':
+          addNgoModel.ngoAddress
+    });
+    Dio dio = new Dio();
+    final response = await dio.post(base_url + 'addngo',
+      data: data,
+      options: Options(
+        method: 'POST',
+        responseType: ResponseType.json,
+      ),
     );
-    if(response.statusCode == 200){
-      print(response.body);
+    if(response.statusCode == 200 || response.statusCode == 500){
+      print(response.data);
     }
     else{
-      throw Exception("Could not add ngo");
+      throw Exception("Could not upload data");
     }
   }
+
+
+  // static Future<AddNgoModel> addNewNgo(AddNgoModel addNgoModel) async{
+  //   final http.Response response = await http.post(
+  //     base_url + "addngo",
+  //     headers: <String, String>{
+  //       "Content-Type": "application/json; charset=UTF-8"
+  //     },
+  //     body: jsonEncode(<dynamic, dynamic>{
+  //       'ngo_name': addNgoModel.ngoName,
+  //       'ngo_contact': addNgoModel.ngoContact,
+  //       'ngo_address': addNgoModel.ngoAddress,
+  //       'ngo_logo_image': addNgoModel.ngoLogoImage,
+  //       'ngo_cover_image': addNgoModel.ngoCoverImage
+  //     }),
+  //   );
+  //   if(response.statusCode == 200){
+  //     print(response.body);
+  //   }
+  //   else{
+  //     throw Exception("Could not add ngo");
+  //   }
+  // }
 
 
 // Future<ItemModel> getitemmodel() async {

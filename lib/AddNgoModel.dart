@@ -1,9 +1,11 @@
+import 'dart:io';
+
 class AddNgoModel{
   String ngoName;
   String ngoContact;
   String ngoAddress;
-  String ngoLogoImage;
-  String ngoCoverImage;
+  File ngoLogoImage;
+  File ngoCoverImage;
 
   AddNgoModel({this.ngoName, this.ngoContact, this.ngoAddress , this.ngoLogoImage, this.ngoCoverImage});
 

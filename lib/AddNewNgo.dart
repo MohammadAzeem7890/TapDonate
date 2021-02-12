@@ -56,8 +56,8 @@ class _AddNewNgoState extends State<AddNewNgo> {
     });
   }
 
-  double height = 0;
-  double width = 0;
+  double height = 1;
+  double width = 1;
 
   @override
   void initState() {

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:tap_donate/AddNgoModel.dart';
@@ -7,6 +8,7 @@ import 'package:tap_donate/DonateFieldLabel.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tap_donate/HomePage.dart';
 import 'package:tap_donate/Network.dart';
+import 'package:http/http.dart' as http;
 
 void main() => runApp(MaterialApp(home: AddNewNgo(),));
 
@@ -42,6 +44,33 @@ class _AddNewNgoState extends State<AddNewNgo> {
   double height = 0;
   double width = 0;
 
+  Future createNgo() async{
+    final http.Response response = await http.post("http://tapdonate.textiledigitizing.com/api/auth/v1/ddngo",
+      headers: <String, String>{
+      'Content-Type': "application/json; Charset=UTF-8"
+      },
+      body: jsonEncode(<dynamic, dynamic>{
+        'ngo_name': ngoName.text,
+        'ngo_contact': ngoContact.text,
+        'ngo_address': ngoAddress.text,
+        'ngo_logo_image': image.path,
+        'ngo_cover_image': image.path,
+      }),
+    );
+    if(response.statusCode == 200){
+      print(response.body);
+    }
+    else{
+      throw Exception('Could not post data');
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+   // createNgo();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,19 +113,20 @@ class _AddNewNgoState extends State<AddNewNgo> {
             ),
             CustomButton(
               onPressed: (){
-                Network.addNewNgo(AddNgoModel(ngoName: ngoName.text, ngoContact: ngoContact.text, ngoAddress: ngoAddress.text, ngoLogoImage: image.path));
+                //Network.addNewNgo(AddNgoModel(ngoName: ngoName.text, ngoContact: ngoContact.text, ngoAddress: ngoAddress.text, ngoLogoImage: image.path));
                 //Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
                 setState(() {
                   height = height + 200;
                   width = width + 300;
                 });
+                createNgo();
               },
               height: 45,
               width: 280,
               color: customGreen,
               txtColor: Colors.white,
               value: "submit", fontSize: 18,
-            )
+            ),
           ],
         ),
       ),

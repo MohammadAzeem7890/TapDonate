@@ -30,10 +30,6 @@ class _AddNewNgoState extends State<AddNewNgo> {
     setState(() async {
       if (pickedFile != null) {
         image = File(pickedFile.path);
-      } else {
-        setState(() {
-          Text("Failed");
-        });
       }
     });
   }

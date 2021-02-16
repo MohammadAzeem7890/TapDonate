@@ -34,19 +34,6 @@ class _AddNewNgoState extends State<AddNewNgo> {
     });
   }
 
-  double height = 1;
-  double width = 1;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    setState(() {
-      height = height + 200;
-      width = width + 300;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,7 +86,8 @@ class _AddNewNgoState extends State<AddNewNgo> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 8),
               child: InkWell(
-                onTap: getCameraImage,
+                onTap:
+                    getCameraImage,
                 child: Card(
                   color: Colors.white70,
                   elevation: 1,
@@ -117,13 +105,10 @@ class _AddNewNgoState extends State<AddNewNgo> {
               ),
             ),
             Container(
-              height: height,
-              width: width,
-              child: image == null
-                  ? CircularProgressIndicator()
-                  : Image.file(
+              height: 200,
+              width: 300,
+              child: image == null? Text("No image selected !"): Image.file(
                       image,
-                      fit: BoxFit.fill,
                     ),
             ),
             CustomButton(

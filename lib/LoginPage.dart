@@ -69,13 +69,12 @@ class LoginForm extends StatelessWidget {
                 onPressed: () async {
                   SharedPreferences prefs = await SharedPreferences.getInstance();
                   // SharedPref prefs = new SharedPref();
-                  Network.logIn(LoginModel(email: email.text, password: password.text)).then((value) => {
+                    var res = Network.logIn(LoginModel(email: email.text, password: password.text)).then((value) => {
                     prefs.setString("email", value.user.userEmail),
                     //prefs.setBool(value.user.userId, true),
                     prefs.setString("user_Id", value.user.userId),
                     prefs.setString("user_name", value.user.userName),
                     Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()))
-
                   });
                   // prefs.key = email.text;
                   // prefs.setVisitingFlag();

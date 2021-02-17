@@ -22,32 +22,6 @@ class Network {
 
   /// call for user signup
   static Future<ApiResponse> signUp(SignUpUser.User user) async {
-    // List<OrderDetails> orderDetails = List<OrderDetails>();
-    //
-    // orderDetails.add(OrderDetails(
-    //     itemId: 1,
-    //     itemPrice: 100,
-    //     itemQuantity: 1,
-    //     itemInstruction: "kjasdkjasd"));
-    //
-    // MetaDataOrder metaDataOrder = MetaDataOrder(orderDetails: orderDetails);
-    //
-    // AddOrders addOrders = AddOrders(
-    //   address: "asdasda",
-    //   contactNumber: "03070210516",
-    //   couponDiscount: 20,
-    //   couponId: 1,
-    //   deliveryCharges: 600,
-    //   deliveryZoneId: 1,
-    //   email: "mwaqasiu@gmail.com",
-    //   firstName: "Raja",
-    //   lastName: "Poran",
-    //   grandTotal: 800,
-    //   metaData: metaDataOrder,
-    //   orderInstruction: "hjsagdjaghsdjhgas",
-    //   orderStatus: "pending",
-    //   shopId: 1
-    // );
 
     final http.Response response = await http.post(base_url+"signup",
       headers: <String, String>{
@@ -65,6 +39,7 @@ class Network {
       // If the server did return a 201 CREATED response,
       // then parse the JSON.
       //print();
+      return jsonDecode(response.body);
       print(response.body);
     } else {
       // If the server did not return a 201 CREATED response,
@@ -170,7 +145,6 @@ class Network {
     }
   }
 
-
   static Future<NgoList> getNgoList() async {
     final http.Response response = await http.get(
         Uri.encodeFull(base_url + "getallngos"),
@@ -188,7 +162,7 @@ class Network {
       throw Exception("Could not get ngoList");
     }
   }
-   static Future<List<GetNgos>> getNgo() async{
+  static Future<List<GetNgos>> getNgo() async{
      List<GetNgos> ngoInfo;
     Network.getNgoList().then((value) => {
         ngoInfo = value.getNgos.toList(),
@@ -211,7 +185,6 @@ class Network {
       throw Exception("loading...");
     }
   }
-
   static Future<List<NgoCategoryList>> getCategory() {
     List<NgoCategoryList> categoryInfo;
     Network.getCategories().then((value) => {
@@ -238,7 +211,6 @@ class Network {
       throw Exception("Failed to Update !");
     }
   }
-
 
   static Future<AddNgoModel> addNewNgo(AddNgoModel addNgoModel) async{
     String logoImage = addNgoModel.ngoLogoImage.path.split('/').last;

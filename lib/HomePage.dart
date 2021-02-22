@@ -71,7 +71,9 @@ class _HomePageState extends State<HomePage> {
                           ListTile(
                             leading: Padding(
                               padding: const EdgeInsets.all(0),
-                              child: Image.network(Network.image_base_url + snapshot.data.getNgos[index].ngoLogoPath + snapshot.data.getNgos[index].ngoLogoImageName),
+                              child: FadeInImage.assetNetwork(
+                                  placeholder: 'Images/sunbeam.png',
+                                  image: "http://tapdonate.textiledigitizing.com/" + snapshot.data.getNgos[index].ngoLogoPath + "/" + snapshot.data.getNgos[index].ngoLogoImageName),
                             ),
                             title: Text(
                               snapshot.data.getNgos[index].ngoName,
